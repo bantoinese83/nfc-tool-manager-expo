@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler';
 import { registerRootComponent } from 'expo';
-import App from "./(tabs)";
+import ScanScreen from "./screens/index";
 
-registerRootComponent(App);
+registerRootComponent(ScanScreen);
 
-export default App;
+export default ScanScreen;

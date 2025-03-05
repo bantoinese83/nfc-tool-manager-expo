@@ -2,7 +2,7 @@ import { Tabs } from 'expo-router';
 import { Platform } from 'react-native';
 import { Scan, History, Settings, BookMarked } from 'lucide-react-native';
 import { TabBar } from '../styles';
-
+import ScanScreen from '../screens/index';
 
 export default function TabLayout() {
   return (
@@ -40,6 +40,14 @@ export default function TabLayout() {
           title: 'Settings',
           tabBarIcon: ({ color, size }) => <Settings size={size} color={color} />,
         }}
+      />
+      <Tabs.Screen
+        name="ScanScreen"
+        options={{
+          title: 'NFC Tool',
+          tabBarIcon: ({ color, size }) => <Scan size={size} color={color} />,
+        }}
+        component={ScanScreen}
       />
     </Tabs>
   );
