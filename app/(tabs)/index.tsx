@@ -1,74 +1,121 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { useEffect } from 'react';
+import { View, Text, StyleSheet, Platform } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Animated, { 
+  useAnimatedStyle, 
+  withRepeat, 
+  withTiming,
+  useSharedValue
+} from 'react-native-reanimated';
+import { Scan } from 'lucide-react-native';
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+export default function ScanScreen() {
+  const insets = useSafeAreaInsets();
+  const scale = useSharedValue(1);
 
-export default function HomeScreen() {
+  useEffect(() => {
+    scale.value = withRepeat(
+      withTiming(1.2, { duration: 1000 }),
+      -1,
+      true
+    );
+  }, []);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12'
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <View style={[styles.container, { paddingTop: insets.top }]}>
+      <View style={styles.header}>
+        <Text style={styles.title}>NFC Scanner</Text>
+      </View>
+
+      <View style={styles.scanArea}>
+        <Animated.View style={[styles.scanCircle, animatedStyle]}>
+          <Scan size={48} color="#007AFF" />
+        </Animated.View>
+        <Text style={styles.scanText}>
+          {Platform.OS === 'web' 
+            ? 'NFC scanning is not available on web browsers'
+            : 'Hold your device near an NFC tag'}
+        </Text>
+      </View>
+
+      <View style={styles.infoArea}>
+        <Text style={styles.infoText}>
+          Supported tag types:
+        </Text>
+        <Text style={styles.tagTypes}>
+          • NDEF{'\n'}
+          • MIFARE Classic{'\n'}
+          • ISO 14443-4{'\n'}
+          • ISO/IEC 15693
+        </Text>
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+  container: {
+    flex: 1,
+    backgroundColor: '#F2F2F7',
   },
-  stepContainer: {
-    gap: 8,
+  header: {
+    padding: 16,
+    backgroundColor: '#ffffff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#e5e5e5',
+  },
+  title: {
+    fontSize: 34,
+    fontWeight: 'bold',
+    color: '#000000',
+  },
+  scanArea: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  scanCircle: {
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+    backgroundColor: '#ffffff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  scanText: {
+    marginTop: 24,
+    fontSize: 16,
+    color: '#8E8E93',
+    textAlign: 'center',
+  },
+  infoArea: {
+    padding: 16,
+    backgroundColor: '#ffffff',
+    margin: 16,
+    borderRadius: 10,
+  },
+  infoText: {
+    fontSize: 17,
+    fontWeight: '600',
+    color: '#000000',
     marginBottom: 8,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  tagTypes: {
+    fontSize: 15,
+    color: '#3C3C43',
+    lineHeight: 24,
   },
 });
