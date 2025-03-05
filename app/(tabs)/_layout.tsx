@@ -1,7 +1,8 @@
 import { Tabs } from 'expo-router';
 import { Platform } from 'react-native';
 import { Scan, History, Settings, BookMarked } from 'lucide-react-native';
-import TabBar from '../../components/layout/TabBar';
+import { TabBar } from '../styles';
+
 
 export default function TabLayout() {
   return (
