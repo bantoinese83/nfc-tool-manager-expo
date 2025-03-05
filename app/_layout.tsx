@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import Header from '../components/layout/Header';
+import Footer from '../components/layout/Footer';
 
 declare global {
   interface Window {
@@ -15,9 +17,11 @@ export default function RootLayout() {
 
   return (
     <>
+      <Header />
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="+not-found" />
       </Stack>
+      <Footer />
       <StatusBar style="auto" />
     </>
   );

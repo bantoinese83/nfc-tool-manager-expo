@@ -1,19 +1,16 @@
 import { Tabs } from 'expo-router';
 import { Platform } from 'react-native';
 import { Scan, History, Settings, BookMarked } from 'lucide-react-native';
+import TabBar from '../../components/layout/TabBar';
 
 export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarStyle: {
-          backgroundColor: '#ffffff',
-          borderTopWidth: 1,
-          borderTopColor: '#e5e5e5',
-        },
-        tabBarActiveTintColor: '#007AFF',
-        tabBarInactiveTintColor: '#8E8E93',
+        tabBarStyle: TabBar.style,
+        tabBarActiveTintColor: TabBar.activeTintColor,
+        tabBarInactiveTintColor: TabBar.inactiveTintColor,
       }}>
       <Tabs.Screen
         name="index"
